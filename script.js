@@ -2,6 +2,14 @@ const rollButton = document.querySelector("#roll-button");
 const result = document.querySelector("#result");
 const resultLabel = document.querySelector("#result-label");
 const page = document.body;
+const chillOverlay = document.querySelector("#chill-overlay");
+const rapidTapWindowMs = 7000;
+const rapidTapTarget = 20;
+
+let rollTapTimes = [];
+let isRolling = false;
+let shuffleTimer;
+let pagePulseTimer;
 
 const rollMessages = {
   1: "Nat 1 - beautiful disaster",
@@ -27,18 +35,29 @@ const rollMessages = {
 };
 
 function rollD20() {
-  rollButton.disabled = true;
+  if (isRolling || page.classList.contains("chill-mode")) {
+    return;
+  }
+
+  isRolling = true;
+
+  if (pagePulseTimer) {
+    clearTimeout(pagePulseTimer);
+    pagePulseTimer = null;
+  }
+
   page.classList.add("page-rolling");
   resultLabel.textContent = "Rolling...";
   result.classList.remove("rolling", "nat-1", "nat-20");
 
   let ticks = 0;
-  const shuffle = setInterval(() => {
+  shuffleTimer = setInterval(() => {
     result.textContent = Math.floor(Math.random() * 20) + 1;
     ticks += 1;
 
     if (ticks === 10) {
-      clearInterval(shuffle);
+      clearInterval(shuffleTimer);
+      shuffleTimer = null;
       showFinalRoll();
     }
   }, 45);
@@ -52,8 +71,48 @@ function showFinalRoll() {
   result.classList.toggle("nat-1", roll === 1);
   result.classList.toggle("nat-20", roll === 20);
   result.classList.add("rolling");
-  setTimeout(() => page.classList.remove("page-rolling"), 420);
-  rollButton.disabled = false;
+  pagePulseTimer = setTimeout(() => {
+    page.classList.remove("page-rolling");
+    pagePulseTimer = null;
+  }, 420);
+  isRolling = false;
 }
 
-rollButton.addEventListener("click", rollD20);
+function trackRollTap() {
+  const now = Date.now();
+
+  rollTapTimes = rollTapTimes.filter((tapTime) => now - tapTime < rapidTapWindowMs);
+  rollTapTimes.push(now);
+
+  if (rollTapTimes.length >= rapidTapTarget) {
+    triggerChillMode();
+  }
+}
+
+function triggerChillMode() {
+  if (page.classList.contains("chill-mode")) {
+    return;
+  }
+
+  if (shuffleTimer) {
+    clearInterval(shuffleTimer);
+    shuffleTimer = null;
+  }
+
+  if (pagePulseTimer) {
+    clearTimeout(pagePulseTimer);
+    pagePulseTimer = null;
+  }
+
+  isRolling = false;
+  rollButton.disabled = true;
+  result.classList.remove("rolling", "nat-1", "nat-20");
+  page.classList.remove("page-rolling");
+  page.classList.add("chill-mode");
+  chillOverlay.setAttribute("aria-hidden", "false");
+}
+
+rollButton.addEventListener("click", () => {
+  trackRollTap();
+  rollD20();
+});
