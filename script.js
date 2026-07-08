@@ -3,6 +3,8 @@ const result = document.querySelector("#result");
 const resultLabel = document.querySelector("#result-label");
 const page = document.body;
 const chillOverlay = document.querySelector("#chill-overlay");
+const logoFaceButton = document.querySelector("#logo-face-button");
+const logoWhisper = document.querySelector("#logo-whisper");
 const rapidTapWindowMs = 7000;
 const rapidTapTarget = 20;
 
@@ -10,6 +12,13 @@ let rollTapTimes = [];
 let isRolling = false;
 let shuffleTimer;
 let pagePulseTimer;
+let logoWhisperTimer;
+
+const logoWhisperMessages = [
+  "never not funny",
+  "and that's true",
+  "twists and turns",
+];
 
 const rollMessages = {
   1: "Nat 1 - beautiful disaster",
@@ -78,6 +87,24 @@ function showFinalRoll() {
   isRolling = false;
 }
 
+function showLogoWhisper() {
+  const message = logoWhisperMessages[Math.floor(Math.random() * logoWhisperMessages.length)];
+
+  logoWhisper.textContent = message;
+  logoWhisper.classList.remove("is-visible");
+  void logoWhisper.offsetWidth;
+  logoWhisper.classList.add("is-visible");
+
+  if (logoWhisperTimer) {
+    clearTimeout(logoWhisperTimer);
+  }
+
+  logoWhisperTimer = setTimeout(() => {
+    logoWhisper.classList.remove("is-visible");
+    logoWhisperTimer = null;
+  }, 2600);
+}
+
 function trackRollTap() {
   const now = Date.now();
 
@@ -111,6 +138,8 @@ function triggerChillMode() {
   page.classList.add("chill-mode");
   chillOverlay.setAttribute("aria-hidden", "false");
 }
+
+logoFaceButton.addEventListener("click", showLogoWhisper);
 
 rollButton.addEventListener("click", () => {
   trackRollTap();

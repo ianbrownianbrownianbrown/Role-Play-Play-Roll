@@ -170,13 +170,77 @@ h1 {
   font-weight: 800;
 }
 
+.logo-easter-egg {
+  position: relative;
+  width: min(150px, 54vw);
+  margin: 28px auto 18px;
+}
+
 .rapid-fire-logo {
   display: block;
-  width: min(150px, 54vw);
+  width: 100%;
   height: auto;
-  margin: 28px auto 18px;
+  margin: 0 auto;
   opacity: 0.76;
   filter: drop-shadow(0 0 14px rgba(255, 43, 214, 0.44));
+}
+
+.logo-face-button {
+  position: absolute;
+  left: 38%;
+  top: 24%;
+  width: 42%;
+  min-width: 44px;
+  aspect-ratio: 1;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: transparent;
+  box-shadow: none;
+  cursor: pointer;
+}
+
+.logo-face-button:hover {
+  background: transparent;
+}
+
+.logo-face-button:active {
+  transform: none;
+  box-shadow: none;
+}
+
+.logo-face-button:focus-visible {
+  outline: 2px solid var(--neon-orange-hot);
+  outline-offset: 2px;
+}
+
+.logo-whisper {
+  position: absolute;
+  left: 72%;
+  top: 53%;
+  z-index: 2;
+  width: max-content;
+  max-width: min(210px, 68vw);
+  padding: 6px 9px;
+  border: 1px solid rgba(255, 176, 0, 0.8);
+  border-radius: 8px;
+  background: rgba(9, 7, 13, 0.88);
+  color: var(--neon-orange-hot);
+  font-size: 0.86rem;
+  font-weight: 900;
+  line-height: 1.1;
+  opacity: 0;
+  pointer-events: none;
+  text-align: left;
+  text-shadow:
+    0 0 8px rgba(255, 176, 0, 0.94),
+    0 0 18px rgba(255, 122, 0, 0.82);
+  transform: translate(6px, -50%) scale(0.94);
+}
+
+.logo-whisper.is-visible {
+  animation: logo-whisper-pop 2600ms ease both;
 }
 
 .instagram-link {
@@ -307,6 +371,28 @@ body.chill-mode .chill-overlay {
 @media (max-width: 520px) {
   .instagram-link {
     margin-top: 32px;
+  }
+}
+
+@keyframes logo-whisper-pop {
+  0% {
+    opacity: 0;
+    transform: translate(2px, -50%) scale(0.86);
+  }
+
+  12% {
+    opacity: 1;
+    transform: translate(10px, -50%) scale(1);
+  }
+
+  82% {
+    opacity: 1;
+    transform: translate(10px, -50%) scale(1);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate(14px, -50%) scale(0.96);
   }
 }
 
