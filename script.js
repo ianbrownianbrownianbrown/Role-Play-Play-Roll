@@ -5,6 +5,9 @@ const page = document.body;
 
 const rollMessages = {
   1: "Nat 1 - beautiful disaster",
+  2: "the ancient tomes foretold this",
+  3: "egads!",
+  4: "rookie numbers",
   8: "8 is ian's favorite number",
   20: "Nat 20 - spotlight moment",
 };
