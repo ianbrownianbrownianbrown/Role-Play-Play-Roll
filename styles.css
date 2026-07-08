@@ -180,11 +180,13 @@ h1 {
 }
 
 .instagram-link {
-  display: inline-flex;
+  display: flex;
   align-items: center;
   justify-content: center;
   min-height: 46px;
+  width: fit-content;
   max-width: 100%;
+  margin: 24px auto 0;
   padding: 12px 18px;
   border: 2px solid var(--neon-pink);
   border-radius: 8px;
@@ -247,6 +249,12 @@ button:disabled {
 button:focus-visible {
   outline: 3px solid var(--gold);
   outline-offset: 4px;
+}
+
+@media (max-width: 520px) {
+  .instagram-link {
+    margin-top: 32px;
+  }
 }
 
 @keyframes page-pulse {
